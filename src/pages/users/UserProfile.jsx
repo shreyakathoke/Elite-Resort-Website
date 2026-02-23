@@ -1,5 +1,7 @@
 import React, { useRef, useState } from "react";
-import "../../styles/userProfiles.css";
+import "../../styles/userprofiles.css";
+// import "../../styles/userProfiles.css";
+// import '../../styles/userProfile.css';
 
 
 export default function UserProfilePage() {

@@ -1,0 +1,157 @@
+.pool-sec {
+  position: relative;
+  width: 100%;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Fixed background image */
+.pool-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("/pool.jpg"); /* put in public/images */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* ✅ fixed */
+  z-index: 0;
+}
+
+/* dark overlay for better text contrast */
+.pool-sec::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+/* content layer */
+.pool-inner {
+  position: relative;
+  z-index: 2;
+}
+
+/* right card */
+.pool-card {
+  border: 1px solid rgba(201, 138, 114, 0.7);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  padding: 55px 40px;
+}
+
+/* copper small top line */
+.pool-topline {
+  width: 110px;
+  height: 2px;
+  background: #c98a72;
+  margin-bottom: 26px;
+}
+
+/* heading */
+.pool-title {
+  color: #fff;
+  font-size: clamp(40px, 4vw, 70px);
+  font-weight: 400;
+  margin: 0 0 16px;
+}
+
+/* paragraph */
+.pool-text {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14.5px;
+  line-height: 2;
+  margin: 0 auto 10px;
+  max-width: 520px;
+}
+
+/* feature row */
+.pool-features {
+  margin-top: 34px;
+}
+
+.pool-feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* icon circle */
+.pool-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 138, 114, 0.75);
+  display: grid;
+  place-items: center;
+  color: #c98a72;
+  font-size: 30px;
+}
+
+.pool-label {
+  color: #fff;
+  font-size: 14px;
+}
+
+/* button */
+.pool-btn {
+  background: #c98a72;
+  border: none;
+  color: #fff;
+  padding: 14px 56px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: 0.25s ease;
+}
+
+.pool-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 45px rgba(201, 138, 114, 0.25);
+}
+
+.pool-btn:active {
+  transform: scale(0.98);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 991.98px) {
+  .pool-card {
+    padding: 40px 22px;
+  }
+}
+
+/* Mobile: center panel, reduce spacing */
+@media (max-width: 767.98px) {
+  .pool-sec {
+    min-height: auto;
+    padding: 70px 0;
+  }
+
+  .pool-bg {
+    background-attachment: scroll; /* ✅ fixed can lag on some mobiles */
+  }
+
+  .pool-card {
+    padding: 34px 18px;
+  }
+
+  .pool-features .col-4 {
+    width: 100%;
+  }
+
+  .pool-feature {
+    flex-direction: row;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .pool-label {
+    font-size: 15px;
+  }
+
+  .pool-btn {
+    width: 100%;
+  }
+}

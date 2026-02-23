@@ -1,0 +1,154 @@
+.site-footer {
+  width: 100%;
+  background: #3a3a3a;
+  color: rgba(255, 255, 255, 0.78);
+  position: relative;
+}
+
+/* Titles */
+.footer-title {
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  
+}
+
+
+.footer-brand-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(201, 138, 114, 0.7);
+  border-radius: 8px;
+  color: #CB8670;
+}
+
+.footer-brand-name {
+  color: #fff;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.footer-text {
+  max-width: 520px;
+  line-height: 1.9;
+  font-size: 14px;
+  margin: 0;
+}
+
+
+.map-wrap {
+  position: relative;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.map-img {
+  width: 100%;
+  display: block;
+  opacity: 0.55;
+  filter: grayscale(100%);
+}
+
+.map-dot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #CB8670;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(201, 138, 114, 0.18);
+  opacity: 0.95;
+}
+
+.map-dot.d1 { top: 38%; left: 18%; }
+.map-dot.d2 { top: 46%; left: 48%; }
+.map-dot.d3 { top: 58%; left: 70%; }
+.map-dot.d4 { top: 70%; left: 86%; }
+
+/* Newsletter */
+.newsletter {
+  display: grid;
+  gap: 14px;
+  max-width: 360px;
+  margin-left: auto;
+}
+
+@media (max-width: 991.98px) {
+  .newsletter {
+    margin-right: auto;
+    max-width: 520px;
+  }
+}
+
+.newsletter-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(201, 138, 114, 0.8);
+  outline: none;
+}
+
+.newsletter-input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.newsletter-btn {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 10px;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  background: #CB8670;
+  transition: 0.2s ease;
+}
+
+.newsletter-btn:hover {
+  background: #b67762;
+}
+
+/* Bottom */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.heart {
+  color: #c98a72;
+}
+
+/* Back to top */
+.to-top-btn {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 6px;
+  background: #c98a72;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  transition: 0.2s ease;
+}
+
+.to-top-btn:hover {
+  background: #b67762;
+  transform: translateY(-2px);
+}
+
+
+

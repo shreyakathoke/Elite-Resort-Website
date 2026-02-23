@@ -1,0 +1,360 @@
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 95vh;
+  min-height: 600px;
+  overflow: hidden;
+
+  /* default theme variables */
+  --box-bg: rgba(15, 20, 25, 0.65);
+  --box-layer: rgba(0, 0, 0, 0.2);
+  --accent: #CB8670; /* fixed border color */
+  --overlay-top: rgba(0, 0, 0, 0.10);
+  --overlay-bottom: rgba(0, 0, 0, 0.25);
+}
+
+/* =========================
+   BACKGROUND SLIDES
+========================= */
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: #333; /* fallback */
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 1s ease, transform 7s ease;
+  z-index: 1;
+  filter: brightness(1.15);
+}
+
+.hero-bg.active {
+  opacity: 1;
+}
+
+/* fallback: first visible */
+.hero-bg:first-child {
+  opacity: 1;
+}
+
+/* Zoom on hover */
+.hero:hover .hero-bg.active {
+  transform: scale(1.08);
+}
+
+/* overlay (uses variables) */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(var(--overlay-top), var(--overlay-bottom));
+}
+
+/* =========================
+   THEMES (per slide)
+========================= */
+
+.hero-theme-one {
+  --box-bg: rgba(15, 20, 25, 0.62);
+  --box-layer: rgba(0, 0, 0, 0.18);
+  --overlay-top: rgba(0, 0, 0, 0.08);
+  --overlay-bottom: rgba(0, 0, 0, 0.20);
+}
+
+.hero-theme-two {
+  --box-bg: rgba(10, 18, 24, 0.60);
+  --box-layer: rgba(0, 0, 0, 0.22);
+  --overlay-top: rgba(0, 0, 0, 0.06);
+  --overlay-bottom: rgba(0, 0, 0, 0.18);
+}
+
+.hero-theme-three {
+  --box-bg: rgba(18, 15, 22, 0.60);
+  --box-layer: rgba(0, 0, 0, 0.20);
+  --overlay-top: rgba(0, 0, 0, 0.05);
+  --overlay-bottom: rgba(0, 0, 0, 0.16);
+}
+
+.hero-theme-four {
+  --box-bg: rgba(20, 16, 14, 0.62);
+  --box-layer: rgba(0, 0, 0, 0.18);
+  --overlay-top: rgba(0, 0, 0, 0.07);
+  --overlay-bottom: rgba(0, 0, 0, 0.20);
+}
+
+/* =========================
+   CONTENT LAYOUT
+========================= */
+
+.hero-inner {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+/* =========================
+   DIALOG BOX
+========================= */
+
+.hero-card {
+  position: relative;
+  width: min(720px, 88vw);
+
+  /* ✅ fixed: don't use height:min(400px) */
+  min-height: 360px;
+  padding: 60px 55px;
+
+  background: var(--box-bg);
+  border: 3px solid var(--accent);
+
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+
+  transition: background 0.5s ease, border-color 0.5s ease;
+}
+
+/* Offset depth */
+.hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translate(-18px, -18px);
+  background: var(--box-layer);
+  pointer-events: none;
+  transition: background 0.5s ease;
+}
+
+/* Decorative line */
+.hero-line {
+  width: 90px;
+  height: 2px;
+  margin: 0 auto 22px;
+  background: var(--accent);
+  transition: background 0.5s ease;
+}
+
+/* Title */
+.hero-title {
+  color: #fff;
+  letter-spacing: 1px;
+  margin: 0;
+  font-size: clamp(40px, 5vw, 76px);
+  font-weight: 700;
+}
+
+/* Subtitle */
+.hero-subtitle {
+  margin: 20px auto 0;
+  width: 100%;
+  color: #fff;
+  line-height: 1.8;
+  font-size: 1.05rem;
+  opacity: 0.95;
+}
+
+/* Button */
+.hero-cta {
+  width: 180px; /* ✅ fixed */
+  height: 50px;
+  background-color: var(--accent) !important;
+
+  /* ✅ fixed border */
+  border: 2px solid rgba(255, 255, 255, 0.85) !important;
+
+  color: #fff !important;
+  padding: 14px 40px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+
+  transition: transform 0.25s ease, box-shadow 0.35s ease, filter 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  margin: 2px;
+}
+
+/* shimmer */
+.hero-cta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  transform: skewX(-20deg);
+  transition: 0.6s ease;
+}
+
+.hero-cta:hover::before {
+  left: 140%;
+}
+
+.hero-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 45px rgba(203, 134, 112, 0.35);
+  filter: brightness(1.03);
+}
+
+/* =========================
+   SLIDE NUMBERS
+========================= */
+
+.hero-dots {
+  position: absolute;
+  left: 30px;
+  bottom: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 5;
+}
+
+.hero-dot {
+  width: 44px;
+  height: 34px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  transition: 0.3s ease;
+}
+
+.hero-dot:hover {
+  background: rgba(212, 163, 115, 0.3);
+}
+
+.hero-dot.active {
+  background: rgba(212, 163, 115, 0.9);
+  border-color: rgba(212, 163, 115, 1);
+}
+
+/* =========================
+   PROGRESS BAR (NEW)
+========================= */
+
+.hero-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 6;
+}
+
+.hero-progress-bar {
+  height: 100%;
+  width: 100%;
+  background: #CB8670;
+  animation: heroProgress 5s linear forwards;
+}
+
+@keyframes heroProgress {
+  from {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* =========================
+   TEXT ANIMATION (NEW)
+========================= */
+
+.hero-animate .hero-line {
+  animation: heroLine 0.9s ease both;
+}
+
+.hero-animate .hero-title {
+  animation: heroSlideUp 0.9s ease both;
+}
+
+.hero-animate .hero-subtitle {
+  animation: heroSlideUp 1.1s ease both;
+}
+
+.hero-animate .hero-actions {
+  animation: heroSlideUp 1.3s ease both;
+}
+
+@keyframes heroSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroLine {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 90px;
+    opacity: 1;
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .hero {
+    height: auto;
+    padding: 100px 0 60px;
+    min-height: unset;
+  }
+
+  .hero-card {
+    width: 90vw;
+    padding: 40px 25px;
+    min-height: unset;
+  }
+
+  .hero-title {
+    font-size: 3.2rem;
+    font-weight: 800;
+  }
+
+  /* dots become row */
+  .hero-dots {
+    left: 12px;
+    bottom: 24px;
+    flex-direction: row;
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg,
+  .hero-progress-bar,
+  .hero-animate .hero-title,
+  .hero-animate .hero-subtitle,
+  .hero-animate .hero-actions,
+  .hero-animate .hero-line {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .hero:hover .hero-bg.active {
+    transform: scale(1.02);
+  }
+}

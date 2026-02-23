@@ -1,0 +1,178 @@
+/* =========================
+   AUTH (LOGIN / SIGNUP)
+   Elite Resort Theme
+========================= */
+
+.auth-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(203,134,112,0.18), transparent 60%),
+    radial-gradient(1200px 600px at 80% 20%, rgba(0,0,0,0.10), transparent 65%),
+    #f6f7fb;
+}
+
+/* Center page vertically (used in form-only pages) */
+.auth-page-center {
+  display: flex;
+  align-items: center;
+}
+
+/* Card */
+.auth-card {
+  background: #fff;
+  border-radius: 22px;
+  padding: 28px;
+  box-shadow: 0 24px 70px rgba(16, 24, 40, 0.14);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Small badge icon */
+.auth-badge-sm {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: rgba(203,134,112,0.92);
+  color: #111;
+  font-size: 1.15rem;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+}
+
+/* Headings */
+.auth-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  color: rgba(0,0,0,0.55);
+  font-weight: 800;
+}
+
+.auth-title {
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  margin: 6px 0 6px;
+  color: #111;
+}
+
+.auth-subtitle {
+  color: rgba(0,0,0,0.62);
+  font-size: 0.98rem;
+}
+
+/* Links */
+.auth-link {
+  color: #cb8670;
+  font-weight: 800;
+  text-decoration: none;
+}
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+/* Inputs with icons */
+.auth-input {
+  position: relative;
+}
+
+.auth-input i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(0,0,0,0.45);
+  pointer-events: none;
+}
+
+.auth-input .form-control {
+  padding-left: 40px;
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.10);
+  box-shadow: none !important;
+}
+
+.auth-input .form-control:focus {
+  border-color: rgba(203,134,112,0.55);
+  box-shadow: 0 0 0 0.2rem rgba(203,134,112,0.18) !important;
+}
+
+/* Eye button */
+.auth-eye {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: rgba(0,0,0,0.55);
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.auth-eye:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+/* Small helper text */
+.auth-help {
+  font-size: 0.86rem;
+  color: rgba(0,0,0,0.55);
+}
+
+/* Primary button */
+.auth-btn {
+  height: 48px;
+  border-radius: 14px;
+  font-weight: 900;
+  border: 0;
+  background: linear-gradient(135deg, #cb8670, #e7b8aa);
+  color: #111 !important;
+  box-shadow: 0 16px 36px rgba(203,134,112,0.25);
+  transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
+}
+
+.auth-btn:hover {
+  filter: brightness(1.02);
+  transform: translateY(-1px);
+  box-shadow: 0 20px 44px rgba(203,134,112,0.32);
+}
+
+.auth-btn:active {
+  transform: translateY(0);
+}
+
+/* Footer */
+.auth-foot {
+  font-size: 0.88rem;
+  color: rgba(0,0,0,0.55);
+}
+
+.auth-muted-link {
+  color: rgba(0,0,0,0.70);
+  font-weight: 800;
+}
+
+/* Animation */
+.animate-auth {
+  animation: authIn 520ms ease both;
+}
+@keyframes authIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 575.98px) {
+  .auth-card {
+    padding: 22px;
+    border-radius: 18px;
+  }
+
+  .auth-title {
+    font-size: 1.6rem;
+  }
+}

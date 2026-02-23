@@ -1,0 +1,174 @@
+/* Background */
+.svc-section {
+  background: #eef1ec;
+  overflow: hidden;
+}
+
+/* =============================
+   SCROLL REVEAL
+============================= */
+
+.svc-animate {
+  opacity: 0;
+  transform: translateY(40px) scale(0.96);
+}
+
+.svc-section.is-visible .svc-animate {
+  animation: svcReveal 700ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes svcReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =============================
+   CARD
+============================= */
+
+.svc-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 34px 26px 28px;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+  transition: transform 300ms ease, box-shadow 300ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gradient glow sweep */
+.svc-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(11, 124, 128, 0.12),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: 700ms ease;
+}
+
+.svc-card:hover::after {
+  left: 140%;
+}
+
+/* Lift + scale */
+.svc-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.14);
+}
+
+/* =============================
+   ICON
+============================= */
+
+.svc-iconWrap {
+  display: grid;
+  place-items: center;
+  margin-bottom: 18px;
+}
+
+.svc-iconCircle {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #e4f0f0;
+  position: relative;
+  transition: transform 300ms ease;
+}
+
+/* Ripple animation */
+.svc-iconCircle::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid rgba(11, 124, 128, 0.4);
+  animation: svcRipple 2.4s infinite;
+}
+
+@keyframes svcRipple {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.svc-iconCircle i {
+  font-size: 30px;
+  color: #0b7c80;
+  transition: transform 300ms ease;
+}
+
+/* Icon hover bounce */
+.svc-card:hover .svc-iconCircle {
+  transform: scale(1.1);
+}
+
+.svc-card:hover .svc-iconCircle i {
+  transform: rotate(-6deg) scale(1.15);
+}
+
+/* =============================
+   TEXT
+============================= */
+
+.svc-title {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #141414;
+}
+
+.svc-desc {
+  margin: 0 auto;
+  max-width: 260px;
+  color: rgba(0, 0, 0, 0.60);
+  font-size: 14.5px;
+  line-height: 1.75;
+}
+
+/* =============================
+   RESPONSIVE
+============================= */
+
+@media (max-width: 575.98px) {
+  .svc-card {
+    padding: 28px 18px 22px;
+  }
+  .svc-iconCircle {
+    width: 66px;
+    height: 66px;
+  }
+}
+
+/* =============================
+   REDUCED MOTION
+============================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-animate,
+  .svc-iconCircle::before {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

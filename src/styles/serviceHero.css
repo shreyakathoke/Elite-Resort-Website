@@ -1,0 +1,110 @@
+/* wrapper */
+.service-hero {
+  width: 100%;
+}
+
+/* each slide height */
+.service-hero-slide {
+  min-height: 78vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  padding: 40px 0;
+}
+
+/* dark overlay on full image */
+.service-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* glass box */
+.hero-box {
+  position: relative;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.45);
+  border: 2px solid rgba(197, 139, 115, 0.85); /* copper */
+  padding: clamp(28px, 4vw, 54px);
+  backdrop-filter: blur(2px);
+}
+
+/* small copper line */
+.hero-line {
+  width: 84px;
+  height: 2px;
+  background: #c58b73;
+  margin: 0 auto 22px;
+  opacity: 0.95;
+}
+
+/* title */
+.hero-title {
+  margin: 0 0 16px;
+  color: #ffffff;
+  font-weight: 300;
+  letter-spacing: 0.4px;
+  font-size: clamp(34px, 5.2vw, 74px);
+  line-height: 1.05;
+}
+
+/* paragraph */
+.hero-subtitle {
+  margin: 0 auto 26px;
+  max-width: 720px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(13px, 1.2vw, 15px);
+  line-height: 2;
+}
+
+/* button */
+.hero-btn {
+  background: #c58b73;
+  border: 0;
+  color: #fff;
+  padding: 12px 34px;
+  font-size: 14px;
+  border-radius: 0;
+  box-shadow: 0 14px 30px rgba(197, 139, 115, 0.25);
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.hero-btn:hover {
+  background: #b97d66;
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(197, 139, 115, 0.35);
+}
+
+/* Indicators style */
+.service-indicators button {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 0 6px;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.service-indicators .active {
+  background-color: #c58b73;
+}
+
+/* Controls opacity */
+.service-control {
+  opacity: 0.85;
+  transition: opacity 180ms ease;
+}
+.service-control:hover {
+  opacity: 1;
+}
+
+/* Mobile */
+@media (max-width: 575.98px) {
+  .service-hero-slide {
+    min-height: 70vh;
+  }
+
+  .hero-box {
+    padding: 22px 16px;
+  }
+}

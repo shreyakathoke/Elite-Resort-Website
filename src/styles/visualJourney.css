@@ -1,0 +1,170 @@
+/* Section */
+.vj-section {
+  background: #e6dfd5;
+  overflow: hidden;
+}
+
+/* Decorative line */
+.vj-line {
+  width: 110px;
+  height: 2px;
+  background: #c98a72;
+  margin-bottom: 14px;
+}
+
+/* Title */
+.vj-title {
+  font-size: 36px;
+  font-weight: 600;
+  color: #1f1f1f;
+  margin-bottom: 10px;
+}
+
+.vj-subtitle {
+  color: #7a7a7a;
+  font-size: 15px;
+  margin: 0;
+}
+
+/* Card */
+.vj-card {
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transform: translateZ(0);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  cursor: pointer;
+}
+
+/* Wrapper for smoother reveal */
+.vj-img-wrapper {
+  overflow: hidden;
+}
+
+/* Image */
+.vj-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.05);
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1), filter 0.8s ease;
+  will-change: transform;
+}
+
+/* Overlay */
+.vj-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.1),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* Hover */
+.vj-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.18);
+}
+
+.vj-card:hover .vj-img {
+  transform: scale(1.15);
+  filter: saturate(1.1);
+}
+
+.vj-card:hover .vj-overlay {
+  opacity: 1;
+}
+
+/* Floating effect for big image */
+.vj-float {
+  animation: floatSoft 6s ease-in-out infinite;
+}
+
+/* Heights */
+.vj-big {
+  height: 420px;
+}
+
+.vj-rightTop,
+.vj-rightMid {
+  height: 200px;
+}
+
+.vj-small {
+  height: 220px;
+}
+
+/* Extra smooth entrance (works with AOS) */
+.vj-card[data-aos] {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.vj-card[data-aos].aos-animate {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.8s ease;
+}
+
+/* Floating keyframes */
+@keyframes floatSoft {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .vj-big {
+    height: 300px;
+  }
+
+  .vj-rightTop,
+  .vj-rightMid {
+    height: 180px;
+  }
+
+  .vj-small {
+    height: 200px;
+  }
+}
+
+@media (max-width: 575px) {
+  .vj-big,
+  .vj-rightTop,
+  .vj-rightMid,
+  .vj-small {
+    height: 200px;
+  }
+
+  .vj-title {
+    font-size: 28px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .vj-card,
+  .vj-img,
+  .vj-overlay {
+    transition: none !important;
+  }
+
+  .vj-float {
+    animation: none !important;
+  }
+}

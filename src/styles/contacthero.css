@@ -1,0 +1,171 @@
+/* Banner section */
+.contact-hero {
+  position: relative;
+  height: 420px; /* like screenshot */
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Background image */
+.contact-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("/contact-bg.jpg"); /* ✅ put image in public */
+  background-size: cover;
+  background-position: center;
+  filter: contrast(1.05);
+  z-index: 0;
+}
+
+/* dark overlay */
+.contact-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 1;
+}
+
+/* Inner content */
+.contact-hero-inner {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+/* Title box */
+.contact-title-box {
+  border: 2px solid rgba(201, 138, 114, 0.9);
+  padding: 14px 70px;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(3px);
+}
+
+/* Title text */
+.contact-title {
+  margin: 0;
+  color: #fff;
+  font-weight: 500;
+  font-size: clamp(40px, 4vw, 64px);
+  letter-spacing: 0.4px;
+}
+
+/* ==========================
+   Booking bar (overlap)
+========================== */
+.contact-booking {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -60px; /* overlap like screenshot */
+  z-index: 3;
+  width: 100%;
+}
+
+/* bar shell */
+.booking-bar {
+  background: #3a3a3a;
+  border: 1px solid rgba(201, 138, 114, 0.55);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+/* cells */
+.booking-cell {
+  padding: 28px 26px;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid rgba(201, 138, 114, 0.55);
+}
+
+.booking-label {
+  color: rgba(201, 138, 114, 0.95);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.booking-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.booking-caret {
+  font-size: 18px;
+  opacity: 0.8;
+  margin-left: 10px;
+}
+
+/* action */
+.booking-action {
+  background: #c98a72;
+  min-height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.booking-btn {
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-weight: 500;
+  letter-spacing: 1px;
+  font-size: 16px;
+  height: 100%;
+  min-height: 130px;
+  text-transform: uppercase;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 991.98px) {
+  .contact-hero {
+    height: 360px;
+  }
+
+  .contact-booking {
+    bottom: -110px;
+  }
+
+  .booking-value {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .contact-hero {
+    height: 320px;
+  }
+
+  .contact-title-box {
+    padding: 12px 44px;
+  }
+
+  .contact-booking {
+    position: static;
+    transform: none;
+    margin-top: -30px;
+    padding-bottom: 25px;
+  }
+
+  .booking-cell {
+    border-right: none;
+    border-bottom: 1px solid rgba(201, 138, 114, 0.35);
+    min-height: auto;
+    padding: 18px 18px;
+  }
+
+  .booking-action,
+  .booking-btn {
+    min-height: 70px;
+  }
+}

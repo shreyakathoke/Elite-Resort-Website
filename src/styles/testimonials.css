@@ -1,0 +1,206 @@
+/* Background like screenshot (soft beige) */
+.t-wrap {
+  background: #f7f0e6;
+}
+
+/* ============== VIDEO ============== */
+.t-videoWrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.14);
+}
+
+.t-video {
+  width: 100%;
+  height: clamp(260px, 38vw, 420px);
+  object-fit: cover;
+  display: block;
+}
+
+.t-videoOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.20) 0%,
+    rgba(0, 0, 0, 0.50) 100%
+  );
+}
+
+.t-videoText {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 18px;
+  color: #fff;
+}
+
+.t-videoText h2 {
+  margin: 0 0 10px;
+  font-weight: 300;
+  letter-spacing: 0.4px;
+  font-size: clamp(26px, 4vw, 46px);
+}
+
+.t-videoText p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 16px;
+}
+
+/* ============== SLIDER ============== */
+
+/* viewport */
+.t-slider {
+  position: relative;
+  overflow: hidden;
+  padding: 10px 0;
+}
+
+/* soft fade edges (premium look) */
+.t-slider::before,
+.t-slider::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 70px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.t-slider::before {
+  left: 0;
+  background: linear-gradient(to right, #f7f0e6, rgba(247, 240, 230, 0));
+}
+.t-slider::after {
+  right: 0;
+  background: linear-gradient(to left, #f7f0e6, rgba(247, 240, 230, 0));
+}
+
+/* moving track */
+.t-track {
+  display: flex;
+  gap: 18px;
+  width: max-content;
+  animation: tMarquee 22s linear infinite;
+  will-change: transform;
+}
+
+/* pause on hover */
+.t-slider:hover .t-track {
+  animation-play-state: paused;
+}
+
+/* each card item width */
+.t-slideItem {
+  flex: 0 0 auto;
+  width: 340px;
+}
+
+/* responsive card width */
+@media (max-width: 991.98px) {
+  .t-slideItem { width: 320px; }
+}
+@media (max-width: 575.98px) {
+  .t-slideItem { width: 84vw; }
+}
+
+/* ✅ Infinite marquee:
+   because we duplicated items, moving -50% is perfect */
+@keyframes tMarquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ============== CARD DESIGN ============== */
+.t-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 26px 26px 22px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.10);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  height: 100%;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.t-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.14);
+}
+
+/* Top row: stars + quotes */
+.t-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.t-stars {
+  display: flex;
+  gap: 6px;
+}
+
+.t-star {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.t-star.is-on { color: #f4b53f; }
+.t-star.is-off { color: #d9d9d9; }
+
+.t-quotes {
+  font-size: 42px;
+  color: #bfe2e6;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Text */
+.t-text {
+  margin: 0;
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.70);
+  line-height: 1.9;
+  font-size: 15px;
+  min-height: 128px;
+}
+
+/* Footer */
+.t-footer {
+  margin-top: 22px;
+}
+
+.t-name {
+  font-weight: 700;
+  color: #111;
+  font-size: 18px;
+}
+
+.t-place {
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+/* Mobile padding tuning */
+@media (max-width: 575.98px) {
+  .t-card {
+    padding: 22px 18px 18px;
+  }
+  .t-text {
+    min-height: auto;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .t-track {
+    animation: none !important;
+    transform: none !important;
+  }
+}

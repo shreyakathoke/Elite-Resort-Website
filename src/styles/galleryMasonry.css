@@ -1,0 +1,104 @@
+.gm-sec {
+  background: #fff;
+  overflow: hidden;
+}
+
+/* heading */
+.gm-line {
+  width: 110px;
+  height: 2px;
+  background: #c98a72;
+  margin-bottom: 18px;
+}
+
+.gm-title {
+  font-size: clamp(28px, 3.4vw, 48px);
+  color: #2f2f2f;
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+
+.gm-sub {
+  margin: 0 auto;
+  max-width: 720px;
+  color: #777;
+  line-height: 1.9;
+}
+
+/* ✅ Masonry using CSS columns (best + lightweight) */
+.gm-masonry {
+  margin-top: 28px;
+  column-count: 3;         /* desktop */
+  column-gap: 18px;
+}
+
+/* each tile */
+.gm-item {
+  break-inside: avoid;
+  margin: 0 0 18px;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.12);
+  transform: translateZ(0);
+}
+
+/* image */
+.gm-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform: scale(1);
+  transition: transform 650ms ease, filter 650ms ease;
+  will-change: transform;
+}
+
+/* overlay */
+.gm-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.08),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 350ms ease;
+}
+
+/* hover animation */
+.gm-item:hover .gm-img {
+  transform: scale(1.08);
+  filter: saturate(1.05);
+}
+.gm-item:hover .gm-overlay {
+  opacity: 1;
+}
+
+/* subtle lift */
+.gm-item:hover {
+  box-shadow: 0 30px 85px rgba(0, 0, 0, 0.18);
+}
+
+/* ✅ Responsive */
+@media (max-width: 991.98px) {
+  .gm-masonry {
+    column-count: 2; /* tablets */
+  }
+}
+
+@media (max-width: 575.98px) {
+  .gm-masonry {
+    column-count: 1; /* mobile */
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .gm-img,
+  .gm-overlay,
+  .gm-item {
+    transition: none !important;
+  }
+}

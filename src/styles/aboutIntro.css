@@ -1,0 +1,215 @@
+.aboutIntro {
+  width: 100%;
+  background: #ffffff;
+  padding: 40px 0;
+  overflow: hidden; /* keeps slide animations clean */
+}
+
+/* copper line */
+.aboutIntro-line {
+  width: 110px;
+  height: 2px;
+  background: #c98a72;
+  margin-bottom: 30px;
+
+  /* CSS animation: line draws */
+  transform-origin: left;
+  animation: lineDraw 900ms ease-out both;
+}
+
+/* big heading */
+.aboutIntro-title {
+  font-size: clamp(42px, 4.6vw, 76px);
+  font-weight: 400;
+  color: #2f2f2f;
+  margin: 0 0 28px;
+  line-height: 1.15;
+}
+
+/* small premium reveal */
+.aboutIntro-reveal {
+  position: relative;
+  display: inline-block;
+}
+
+.aboutIntro-reveal::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  height: 10px;
+  width: 100%;
+  background: rgba(201, 138, 114, 0.18);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: underlineReveal 900ms ease-out 350ms both;
+  border-radius: 6px;
+}
+
+/* paragraph spacing */
+.aboutIntro-text {
+  color: #777;
+  font-size: 15px;
+  line-height: 2;
+  max-width: 650px;
+  margin: 0 0 38px;
+
+  /* subtle fade-in if AOS disabled */
+  animation: softFade 900ms ease-out 250ms both;
+}
+
+/* button */
+.aboutIntro-btn {
+  border: none;
+  background: #c98a72;
+  color: #fff;
+  padding: 16px 56px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  position: relative;
+  isolation: isolate;
+  border-radius: 2px;
+}
+
+/* premium glow sweep */
+.aboutIntro-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.28) 25%,
+    transparent 55%
+  );
+  transform: translateX(-120%);
+  transition: transform 600ms ease;
+  z-index: -1;
+}
+
+.aboutIntro-btn:hover::before {
+  transform: translateX(120%);
+}
+
+.aboutIntro-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 45px rgba(201, 138, 114, 0.25);
+  filter: brightness(1.02);
+}
+
+.aboutIntro-btn:active {
+  transform: scale(0.98);
+}
+
+/* image wrapper */
+.aboutIntro-imgWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* image itself */
+.aboutIntro-img {
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  display: block;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+
+  /* professional float effect */
+  animation: floatY 5.5s ease-in-out infinite;
+  will-change: transform;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.aboutIntro-img:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 28px 75px rgba(0, 0, 0, 0.16);
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+  .aboutIntro {
+    padding: 20px 0;
+  }
+
+  .aboutIntro-line {
+    margin: 0 auto 22px;
+  }
+
+  .aboutIntro-title,
+  .aboutIntro-text {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .aboutIntro-btn {
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* avoid too much motion on small screens */
+  .aboutIntro-img {
+    animation-duration: 7s;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .aboutIntro-line,
+  .aboutIntro-text,
+  .aboutIntro-img,
+  .aboutIntro-reveal::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* KEYFRAMES */
+@keyframes lineDraw {
+  from {
+    transform: scaleX(0);
+    opacity: 0.2;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes underlineReveal {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes softFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatY {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

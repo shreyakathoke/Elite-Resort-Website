@@ -1,0 +1,224 @@
+.as-section {
+  background: #ffffff;
+
+  /* ✅ initial hidden state (for scroll reveal) */
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+
+.as-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* small copper line at top-left like screenshot */
+.as-kicker {
+  width: 80px;
+  height: 2px;
+  background: #c58b73;
+  margin-bottom: 18px;
+  opacity: 0.9;
+
+  /* ✅ draw animation */
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+/* title + text + button stagger start */
+.as-title,
+.as-text,
+.as-btn {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+/* when visible -> animate in */
+.as-section.is-visible .as-kicker {
+  animation: asLineDraw 700ms ease forwards;
+}
+
+.as-section.is-visible .as-title {
+  animation: asFadeUp 700ms ease forwards;
+  animation-delay: 120ms;
+}
+
+.as-section.is-visible .as-text {
+  animation: asFadeUp 800ms ease forwards;
+  animation-delay: 220ms;
+}
+
+.as-section.is-visible .as-btn {
+  animation: asFadeUp 800ms ease forwards;
+  animation-delay: 320ms;
+}
+
+@keyframes asFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes asLineDraw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* =========================
+   TYPOGRAPHY
+========================= */
+
+.as-title {
+  font-size: clamp(34px, 4vw, 54px);
+  font-weight: 300;
+  letter-spacing: 0.4px;
+  color: #2f2f2f;
+  margin: 0 0 18px;
+}
+
+.as-text {
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 13.5px;
+  line-height: 2;
+  max-width: 520px;
+  margin: 0 0 26px;
+}
+
+/* button like screenshot */
+.as-btn {
+  background: #c58b73;
+  border: 0;
+  color: #fff;
+  padding: 12px 34px;
+  font-size: 14px;
+  border-radius: 0;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  box-shadow: 0 12px 25px rgba(197, 139, 115, 0.25);
+}
+
+.as-btn:hover {
+  background: #b97d66;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 35px rgba(197, 139, 115, 0.35);
+}
+
+/* =========================
+   RIGHT CARDS
+========================= */
+
+.as-card {
+  background: #343434;
+  border: 2px solid rgba(197, 139, 115, 0.9);
+  height: 150px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  transition: transform 200ms ease, background 200ms ease, box-shadow 200ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ✅ card hover */
+.as-card:hover {
+  transform: translateY(-5px);
+  background: #2f2f2f;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+/* ✅ pop-in animation for each card */
+.as-card-animate {
+  opacity: 0;
+  transform: translateY(16px) scale(0.98);
+}
+
+.as-section.is-visible .as-card-animate {
+  animation: asCardIn 650ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes asCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ✅ soft glow sweep effect */
+.as-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -130%;
+  width: 60%;
+  height: 100%;
+  background: rgba(197, 139, 115, 0.15);
+  transform: skewX(-20deg);
+  transition: 700ms ease;
+}
+
+.as-card:hover::after {
+  left: 140%;
+}
+
+.as-icon i {
+  font-size: 52px;
+  color: #c58b73;
+  display: inline-block;
+  margin-bottom: 10px;
+
+  /* ✅ continuous premium float (very subtle) */
+  animation: asIconFloat 2.8s ease-in-out infinite;
+}
+
+@keyframes asIconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* label inside card */
+.as-cardTitle {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* spacing + responsive */
+@media (max-width: 991.98px) {
+  .as-text {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .as-card {
+    height: 140px;
+  }
+  .as-icon i {
+    font-size: 46px;
+  }
+}
+
+/* ✅ Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .as-section,
+  .as-kicker,
+  .as-title,
+  .as-text,
+  .as-btn,
+  .as-card-animate,
+  .as-icon i {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

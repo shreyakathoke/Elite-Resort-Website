@@ -1,0 +1,81 @@
+.wc-section {
+  background: #ffffff;
+}
+
+/* Card wrapper */
+.wc-card {
+  position: relative;
+  overflow: hidden;
+  height: 560px;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.12);
+}
+
+/* background image */
+.wc-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.wc-card:hover .wc-bg {
+  transform: scale(1.08);
+}
+
+/* glass panel in middle */
+.wc-panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(75%, 320px);
+  background: rgba(238, 248, 248, 0.78);
+  border: 2px solid #c58b73;
+  padding: 26px 22px;
+  text-align: center;
+  backdrop-filter: blur(2px);
+}
+
+/* small icon on top */
+.wc-icon i {
+  font-size: 38px;
+  color: #c58b73;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+
+/* title styling like screenshot */
+.wc-title {
+  font-size: 34px;
+  font-weight: 300;
+  margin: 0 0 10px;
+  color: #202020;
+}
+
+/* paragraph lines */
+.wc-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.95;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+/* Responsive sizes */
+@media (max-width: 991.98px) {
+  .wc-card {
+    height: 520px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .wc-card {
+    height: 480px;
+  }
+  .wc-panel {
+    width: min(82%, 330px);
+    padding: 22px 18px;
+  }
+  .wc-title {
+    font-size: 30px;
+  }
+}

@@ -9,7 +9,7 @@ export const getRoomById = (id) =>
 
 // -------- AUTH ----------
 export const userSignup = (data) =>
-  api.post("/api/auth/user/signup", data);
+  api.post("/api/auth/register", data);
 
 export const userLogin = (data) =>
   api.post("/api/auth/user/login", data);

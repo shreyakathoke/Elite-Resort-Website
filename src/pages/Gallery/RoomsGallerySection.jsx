@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "../../styles/roomsGallerySection.css";
 
-// ✅ Replace these with your real images from src/assets
+// Images from src/assets
 import r1 from "../../assets/g.jpg";
 import r2 from "../../assets/g1.jpg";
 import r3 from "../../assets/g2.jpg";
@@ -15,6 +15,7 @@ export default function RoomsGallerySection() {
   const [active, setActive] = useState("All");
   const gridRef = useRef(null);
 
+  // Static gallery items
   const items = useMemo(
     () => [
       { id: 1, src: r1, title: "Panoramic Suite", tag: "Suites" },
@@ -36,25 +37,26 @@ export default function RoomsGallerySection() {
     return items.filter((x) => x.tag === active);
   }, [active, items]);
 
-  // ✅ Scroll reveal animation
+  // Scroll reveal animation
   useEffect(() => {
     const cards = gridRef.current?.querySelectorAll("[data-reveal='card']");
     if (!cards?.length) return;
 
-    const obs = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("is-visible");
-            obs.unobserve(e.target);
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
           }
         });
       },
       { threshold: 0.12 }
     );
 
-    cards.forEach((c) => obs.observe(c));
-    return () => obs.disconnect();
+    cards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
   }, [filtered]);
 
   return (
@@ -65,8 +67,8 @@ export default function RoomsGallerySection() {
           <p className="rg-kicker mb-2">Elite Resort • Rooms & Suites</p>
           <h2 className="rg-title">Explore Our Stays</h2>
           <p className="rg-subtitle mx-auto">
-            Handcrafted comfort, modern luxury, and breathtaking views—designed for
-            a premium resort experience.
+            Handcrafted comfort, modern luxury, and breathtaking views—
+            designed for a premium resort experience.
           </p>
         </div>
 
@@ -86,24 +88,32 @@ export default function RoomsGallerySection() {
           </div>
         </div>
 
-        {/* Grid */}
+        {/* Gallery Grid */}
         <div className="row g-4" ref={gridRef}>
           {filtered.map((item, idx) => (
-            <div key={item.id} className="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <div
+              key={item.id}
+              className="col-12 col-sm-6 col-lg-4 col-xl-3"
+            >
               <article
                 className="rg-card"
                 data-reveal="card"
-                style={{ transitionDelay: `${Math.min(idx, 7) * 70}ms` }}
+                style={{
+                  transitionDelay: `${Math.min(idx, 7) * 70}ms`,
+                }}
               >
                 <div className="rg-media">
-                  <img src={item.src} alt={item.title} className="rg-img" />
+                  <img
+                    src={item.src}
+                    alt={item.title}
+                    className="rg-img"
+                  />
                   <div className="rg-overlay" />
                   <div className="rg-badge">{item.tag}</div>
+
+                  {/* Title only (View details removed) */}
                   <div className="rg-caption">
                     <h6 className="rg-card-title">{item.title}</h6>
-                    <span className="rg-card-link">
-                      View details <span aria-hidden="true">→</span>
-                    </span>
                   </div>
                 </div>
               </article>

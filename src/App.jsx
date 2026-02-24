@@ -14,6 +14,8 @@ import ProfilePage from "./pages/users/ProfilePage";
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 
+import RoomPage from "./pages/Rooms/RoomsPage";
+
 
 
 export default function App() {
@@ -33,9 +35,12 @@ export default function App() {
 
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+
+          
           
           
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/rooms" element={<RoomPage />} />
 
 
         </Routes>

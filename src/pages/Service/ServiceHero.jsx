@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "../../styles/serviceHero.css";
 
 const SLIDES = [
@@ -22,6 +23,12 @@ const SLIDES = [
 ];
 
 export default function ServiceHero() {
+  const navigate = useNavigate();
+
+  const handleReadMore = () => {
+    navigate("/about");
+  };
+
   return (
     <section className="service-hero">
       <div
@@ -31,22 +38,6 @@ export default function ServiceHero() {
         data-bs-interval="4500"
         data-bs-pause="false"
       >
-        {/* Indicators */}
-        <div className="carousel-indicators service-indicators">
-          {SLIDES.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              data-bs-target="#serviceHeroCarousel"
-              data-bs-slide-to={idx}
-              className={idx === 0 ? "active" : ""}
-              aria-current={idx === 0 ? "true" : "false"}
-              aria-label={`Slide ${idx + 1}`}
-            />
-          ))}
-        </div>
-
-        {/* Slides */}
         <div className="carousel-inner">
           {SLIDES.map((s, idx) => (
             <div
@@ -69,7 +60,11 @@ export default function ServiceHero() {
 
                         <p className="hero-subtitle">{s.text}</p>
 
-                        <button className="hero-btn" type="button">
+                        <button
+                          className="hero-btn"
+                          type="button"
+                          onClick={handleReadMore}
+                        >
                           Read More
                         </button>
                       </div>
@@ -80,27 +75,6 @@ export default function ServiceHero() {
             </div>
           ))}
         </div>
-
-        {/* Controls */}
-        <button
-          className="carousel-control-prev service-control"
-          type="button"
-          data-bs-target="#serviceHeroCarousel"
-          data-bs-slide="prev"
-        >
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-
-        <button
-          className="carousel-control-next service-control"
-          type="button"
-          data-bs-target="#serviceHeroCarousel"
-          data-bs-slide="next"
-        >
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Next</span>
-        </button>
       </div>
     </section>
   );

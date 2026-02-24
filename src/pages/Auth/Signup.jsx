@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/auth.css";
+import { userSignup } from "../../api/resortApi"; // ✅ your API file (same where userLogin, sendContact etc.)
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ export default function Signup() {
 
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const canSubmit = useMemo(() => {
     return (
@@ -21,11 +23,13 @@ export default function Signup() {
   const onChange = (e) => {
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
     setError("");
+    setSuccess("");
   };
 
   async function onSubmit(e) {
     e.preventDefault();
     setError("");
+    setSuccess("");
 
     if (!canSubmit) {
       setError("Please fill all fields correctly (password min 6 characters).");
@@ -34,12 +38,31 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      // TODO: connect backend (Flask)
-      await new Promise((r) => setTimeout(r, 650));
+      // ✅ CONNECT BACKEND SIGNUP API
+      const res = await userSignup({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      });
 
-      navigate("/login", { replace: true });
-    } catch {
-      setError("Signup failed. Try with a different email.");
+      // ✅ If backend returns token on signup (optional)
+      // const token = res?.data?.token || res?.token;
+      // if (token) localStorage.setItem("token", token);
+
+      setSuccess("Account created successfully ✅ Redirecting to login...");
+
+      // reset form
+      setForm({ name: "", email: "", password: "" });
+
+      setTimeout(() => {
+        navigate("/login", { replace: true });
+      }, 800);
+    } catch (err) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        "Signup failed. Try with a different email.";
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -65,10 +88,19 @@ export default function Signup() {
                 </div>
               </div>
 
+              {/* ✅ ERROR */}
               {error && (
                 <div className="alert alert-danger py-2 mb-3" role="alert">
                   <i className="bi bi-exclamation-triangle me-2" />
                   {error}
+                </div>
+              )}
+
+              {/* ✅ SUCCESS */}
+              {success && (
+                <div className="alert alert-success py-2 mb-3" role="alert">
+                  <i className="bi bi-check-circle me-2" />
+                  {success}
                 </div>
               )}
 
@@ -84,6 +116,7 @@ export default function Signup() {
                       value={form.name}
                       onChange={onChange}
                       autoComplete="name"
+                      disabled={loading}
                     />
                   </div>
                 </div>
@@ -100,6 +133,7 @@ export default function Signup() {
                       value={form.email}
                       onChange={onChange}
                       autoComplete="email"
+                      disabled={loading}
                     />
                   </div>
                 </div>
@@ -116,12 +150,14 @@ export default function Signup() {
                       value={form.password}
                       onChange={onChange}
                       autoComplete="new-password"
+                      disabled={loading}
                     />
                     <button
                       type="button"
                       className="auth-eye"
                       onClick={() => setShow((p) => !p)}
                       aria-label={show ? "Hide password" : "Show password"}
+                      disabled={loading}
                     >
                       <i className={`bi ${show ? "bi-eye-slash" : "bi-eye"}`} />
                     </button>

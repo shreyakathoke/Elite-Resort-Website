@@ -6,7 +6,7 @@ export default function ContactPage() {
   const [form, setForm] = useState({
     name: "",
     email: "",
-    phoneNo: "",
+    phone: "",
     subject: "",
     message: "",
   });
@@ -17,7 +17,6 @@ export default function ContactPage() {
   const onChange = (e) => {
     const { name, value } = e.target;
     setForm((p) => ({ ...p, [name]: value }));
-    if (status.msg) setStatus({ type: "", msg: "" });
   };
 
   const onSubmit = async (e) => {
@@ -26,24 +25,25 @@ export default function ContactPage() {
     setLoading(true);
 
     try {
-      // ✅ Send ONLY fields backend surely accepts: name, email, query
       await sendContact({
         name: form.name,
         email: form.email,
-        query: `Phone: ${form.phone || "-"} | Subject: ${form.subject} | Message: ${form.message}`,
+        phoneNo: form.phone,
+        subject: form.subject,
+        message: form.message,
+
+        // ✅ fallback (some backends use query instead of subject/message)
+        query: `${form.subject} - ${form.message}`,
       });
 
       setStatus({ type: "success", msg: "Message sent successfully ✅" });
       setForm({ name: "", email: "", phone: "", subject: "", message: "" });
     } catch (err) {
-      console.log("CONTACT ERROR STATUS:", err?.response?.status);
-      console.log("CONTACT ERROR DATA:", err?.response?.data || err);
-
+      console.log("CONTACT ERROR:", err?.response?.data || err);
       const msg =
         err?.response?.data?.message ||
         err?.response?.data?.error ||
         "Failed to send message. Please try again.";
-
       setStatus({ type: "error", msg });
     } finally {
       setLoading(false);
@@ -60,8 +60,8 @@ export default function ContactPage() {
             <div className="contact-hero2-line" />
             <h1 className="contact-hero2-title">Contact</h1>
             <p className="contact-hero2-sub">
-              We’re here to help you plan a perfect stay. Reach out for bookings,
-              events, or special requests.
+              We’re here to help you plan a perfect stay. Reach out for bookings, events,
+              or special requests.
             </p>
           </div>
         </div>
@@ -76,8 +76,8 @@ export default function ContactPage() {
               <div className="contact-card">
                 <h3 className="contact-card-title">Get in touch</h3>
                 <p className="contact-card-text">
-                  Whether you’re planning a romantic getaway, family holiday, or
-                  business retreat — our team will respond quickly.
+                  Whether you’re planning a romantic getaway, family holiday, or business
+                  retreat — our team will respond quickly.
                 </p>
 
                 <div className="contact-info">
@@ -87,9 +87,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <div className="info-label">Address</div>
-                      <div className="info-value">
-                        Elite Resort, Beach Road, India
-                      </div>
+                      <div className="info-value">Elite Resort, Beach Road, India</div>
                     </div>
                   </div>
 
@@ -119,9 +117,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <div className="info-label">Hours</div>
-                      <div className="info-value">
-                        Mon – Sun: 9:00 AM – 9:00 PM
-                      </div>
+                      <div className="info-value">Mon – Sun: 9:00 AM – 9:00 PM</div>
                     </div>
                   </div>
                 </div>
@@ -152,9 +148,7 @@ export default function ContactPage() {
                 {status.msg ? (
                   <div
                     className={`alert ${
-                      status.type === "success"
-                        ? "alert-success"
-                        : "alert-danger"
+                      status.type === "success" ? "alert-success" : "alert-danger"
                     }`}
                     role="alert"
                   >
@@ -165,9 +159,7 @@ export default function ContactPage() {
                 <form onSubmit={onSubmit}>
                   <div className="row g-3">
                     <div className="col-12 col-md-6">
-                      <label className="form-label contact-label">
-                        Full Name
-                      </label>
+                      <label className="form-label contact-label">Full Name</label>
                       <input
                         name="name"
                         value={form.name}
@@ -198,7 +190,7 @@ export default function ContactPage() {
                       <label className="form-label contact-label">Phone</label>
                       <input
                         name="phone"
-                        value={form.phoneNo}
+                        value={form.phone}
                         onChange={onChange}
                         type="tel"
                         className="form-control contact-input"
@@ -208,9 +200,7 @@ export default function ContactPage() {
                     </div>
 
                     <div className="col-12 col-md-6">
-                      <label className="form-label contact-label">
-                        Subject
-                      </label>
+                      <label className="form-label contact-label">Subject</label>
                       <input
                         name="subject"
                         value={form.subject}
@@ -224,9 +214,7 @@ export default function ContactPage() {
                     </div>
 
                     <div className="col-12">
-                      <label className="form-label contact-label">
-                        Message
-                      </label>
+                      <label className="form-label contact-label">Message</label>
                       <textarea
                         name="message"
                         value={form.message}

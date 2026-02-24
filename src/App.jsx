@@ -8,7 +8,7 @@ import ServicePage from "./pages/Service/ServicePage";
 import GalleryPage from "./pages/Gallery/GalleryPage";
 
 import ScrollToTop from "./components/common/Scrollpage";
-import ProfilePage from "./pages/users/ProfilePage";
+import ProfilePage from "./pages/usersProfilePage";
 
 
 import Login from "./pages/Auth/Login";
@@ -39,7 +39,7 @@ export default function App() {
           
           
           
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/userprofile" element={<ProfilePage />} />
           <Route path="/rooms" element={<RoomPage />} />
 
 

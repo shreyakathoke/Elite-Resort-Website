@@ -47,7 +47,7 @@ export default function Login() {
       localStorage.setItem("token", "demo_token");
 
       // Redirect to user profile page
-      navigate("/user-profile", { replace: true });
+      navigate("/profile", { replace: true });
 
     } catch (err) {
       setError("Login failed. Please check your credentials.");

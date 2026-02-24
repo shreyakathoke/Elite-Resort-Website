@@ -4,18 +4,27 @@ import "../../styles/auth.css";
 
 export default function Login() {
   const navigate = useNavigate();
+
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
   const [error, setError] = useState("");
 
+  // Validation
   const canSubmit = useMemo(() => {
-    return form.email.trim() && form.password.trim().length >= 6;
+    return form.email.trim() !== "" && form.password.trim().length >= 6;
   }, [form]);
 
   const onChange = (e) => {
-    setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
     setError("");
   };
 
@@ -24,18 +33,23 @@ export default function Login() {
     setError("");
 
     if (!canSubmit) {
-      setError("Please enter a valid email and password (min 6 characters).");
+      setError("Please enter valid email and password (minimum 6 characters).");
       return;
     }
 
     setLoading(true);
-    try {
-      // TODO: connect backend (Flask)
-      await new Promise((r) => setTimeout(r, 650));
 
+    try {
+      // 🔥 Replace this with real API call (Flask/Django)
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      // Save token
       localStorage.setItem("token", "demo_token");
-      navigate("/", { replace: true });
-    } catch {
+
+      // Redirect to user profile page
+      navigate("/user-profile", { replace: true });
+
+    } catch (err) {
       setError("Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
@@ -48,32 +62,40 @@ export default function Login() {
         <div className="row justify-content-center">
           <div className="col-12 col-sm-10 col-md-8 col-lg-5">
             <div className="auth-card animate-auth">
-              <div className="text-center mb-3">
+
+              {/* Header */}
+              <div className="text-center mb-4">
                 <div className="auth-badge-sm mx-auto">
                   <i className="bi bi-gem" />
                 </div>
+
                 <div className="auth-kicker mt-3">Elite Resort</div>
-                <h1 className="auth-title mb-1">Welcome back</h1>
-                <div className="auth-subtitle">
+                <h2 className="auth-title">Welcome Back</h2>
+
+                <p className="auth-subtitle">
                   Don’t have an account?{" "}
                   <Link to="/signup" className="auth-link">
                     Create one
                   </Link>
-                </div>
+                </p>
               </div>
 
+              {/* Error */}
               {error && (
-                <div className="alert alert-danger py-2 mb-3" role="alert">
-                  <i className="bi bi-exclamation-triangle me-2" />
+                <div className="alert alert-danger py-2 mb-3">
+                  <i className="bi bi-exclamation-triangle me-2"></i>
                   {error}
                 </div>
               )}
 
+              {/* Form */}
               <form onSubmit={onSubmit}>
+
+                {/* Email */}
                 <div className="mb-3">
                   <label className="form-label">Email</label>
                   <div className="auth-input">
-                    <i className="bi bi-envelope" />
+                    <i className="bi bi-envelope"></i>
                     <input
                       type="email"
                       name="email"
@@ -86,10 +108,11 @@ export default function Login() {
                   </div>
                 </div>
 
-                <div className="mb-2">
+                {/* Password */}
+                <div className="mb-3">
                   <label className="form-label">Password</label>
                   <div className="auth-input">
-                    <i className="bi bi-lock" />
+                    <i className="bi bi-lock"></i>
                     <input
                       type={show ? "text" : "password"}
                       name="password"
@@ -99,20 +122,25 @@ export default function Login() {
                       onChange={onChange}
                       autoComplete="current-password"
                     />
+
                     <button
                       type="button"
                       className="auth-eye"
-                      onClick={() => setShow((p) => !p)}
-                      aria-label={show ? "Hide password" : "Show password"}
+                      onClick={() => setShow((prev) => !prev)}
                     >
-                      <i className={`bi ${show ? "bi-eye-slash" : "bi-eye"}`} />
+                      <i className={`bi ${show ? "bi-eye-slash" : "bi-eye"}`}></i>
                     </button>
                   </div>
                 </div>
 
-                <div className="d-flex justify-content-between align-items-center mb-3">
+                {/* Remember + Forgot */}
+                <div className="d-flex justify-content-between align-items-center mb-4">
                   <div className="form-check">
-                    <input className="form-check-input" type="checkbox" id="remember" />
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="remember"
+                    />
                     <label className="form-check-label" htmlFor="remember">
                       Remember me
                     </label>
@@ -123,6 +151,7 @@ export default function Login() {
                   </Link>
                 </div>
 
+                {/* Submit */}
                 <button
                   type="submit"
                   className="btn btn-primary w-100 auth-btn"
@@ -130,16 +159,17 @@ export default function Login() {
                 >
                   {loading ? (
                     <>
-                      <span className="spinner-border spinner-border-sm me-2" />
+                      <span className="spinner-border spinner-border-sm me-2"></span>
                       Signing in...
                     </>
                   ) : (
                     <>
-                      Login <i className="bi bi-arrow-right ms-1" />
+                      Login <i className="bi bi-arrow-right ms-1"></i>
                     </>
                   )}
                 </button>
 
+                {/* Footer */}
                 <div className="auth-foot mt-4 text-center">
                   By signing in, you agree to our{" "}
                   <span className="auth-muted-link">Terms</span> and{" "}
@@ -148,6 +178,7 @@ export default function Login() {
               </form>
             </div>
 
+            {/* Back to Home */}
             <div className="text-center mt-3">
               <Link to="/" className="auth-link small">
                 ← Back to Home

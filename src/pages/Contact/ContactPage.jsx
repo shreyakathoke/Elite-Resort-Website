@@ -6,7 +6,7 @@ export default function ContactPage() {
   const [form, setForm] = useState({
     name: "",
     email: "",
-    phone: "",
+    phoneNo: "",
     subject: "",
     message: "",
   });
@@ -198,7 +198,7 @@ export default function ContactPage() {
                       <label className="form-label contact-label">Phone</label>
                       <input
                         name="phone"
-                        value={form.phone}
+                        value={form.phoneNo}
                         onChange={onChange}
                         type="tel"
                         className="form-control contact-input"

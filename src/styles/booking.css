@@ -1,0 +1,12 @@
+.booking-page {
+  background: #f8f9fa;
+  min-height: 80vh;
+}
+
+.booking-page .card {
+  border-radius: 12px;
+}
+
+.booking-page .badge {
+  font-size: 0.85rem;
+}

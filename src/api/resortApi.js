@@ -1,4 +1,9 @@
 import api from "./api";
+import axios from "axios";
+
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://resort-production.up.railway.app";
 
 // -------- PUBLIC ROOMS ----------
 export const getRooms = () => api.get("/api/rooms");
@@ -22,11 +27,38 @@ export const adminLogin = (data) =>
 export const sendContact = (data) =>
   api.post("/api/contact", data);
 
+//------Booking------//
 
-// -------- BOOKING ----------
-export const bookRoom = (roomId, data) =>
-  api.post(`/bookings/rooms/${roomId}`, data);
+// ✅ Create Booking
+export const createBooking = (roomId, body) => {
+  return api.post(`/bookings/rooms/${roomId}`, body, {
+    headers: { "Content-Type": "application/json" },
+  });
+}
 
-export const cancelBooking = (id) =>
-  api.put(`/bookings/${id}/cancel`);
+// ✅ Cancel Booking
+export function cancelBooking(bookingId) {
+  const token = localStorage.getItem("token");
+
+  return axios.delete(`${API_BASE}/api/booking/cancel/${bookingId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+
+// -------- USER PROFILE ---------- //
+
+export const saveUserProfile = (data) => api.post("/api/profile", data);
+
+export const getUserProfile = () => api.get("/api/profile");
+
+
+// -------- PAYMENTS ----------
+export const makePayment = (data) =>
+  api.post("/api/payments/pay", data);
+
+export const cancelPayment = (paymentId) =>
+  api.put(`/api/payments/${paymentId}/cancel`);
 

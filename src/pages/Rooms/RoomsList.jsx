@@ -4,115 +4,22 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import "../../styles/roomListPage.css";
 
-// ✅ Use your real images from src/assets
+import { getRooms } from "../../api/resortApi";
+
+// ✅ optional fallback images (if backend doesn't provide)
 import room1 from "../../assets/room1.jpg";
 import g3 from "../../assets/g3.jpg";
 import g4 from "../../assets/g4.jpg";
 import g6 from "../../assets/g6.jpg";
-import g14 from "../../assets/g14.jpg";
-import pool from "../../assets/g13.jpg";
 
-const ROOMS = [
-  {
-    id: 1,
-    roomNo: "101",
-    roomType: "Deluxe",
-    pricePerNight: 3499,
-    capacityGuests: 2,
-    availability: "Available",
-    description:
-      "Spacious luxury room with balcony, premium interiors, and a calm ambience.",
-    cover: room1,
-    images: [room1, g3, g4, g6],
-    rating: 4.7,
-    badge: "Most Popular",
-    features: ["Balcony", "Wi-Fi", "Breakfast", "AC"],
-  },
-  {
-    id: 2,
-    roomNo: "202",
-    roomType: "Suite",
-    pricePerNight: 5299,
-    capacityGuests: 3,
-    availability: "Available",
-    description:
-      "Elegant suite for couples with premium comfort and a breathtaking view.",
-    cover: g6,
-    images: [g6, pool, g14, g3],
-    rating: 4.8,
-    badge: "Ocean View",
-    features: ["King Bed", "View", "Room Service", "Wi-Fi"],
-  },
-  {
-    id: 3,
-    roomNo: "110",
-    roomType: "Single",
-    pricePerNight: 2499,
-    capacityGuests: 1,
-    availability: "Unavailable",
-    description:
-      "Modern single room designed for solo travelers with work desk comfort.",
-    cover: g14,
-    images: [g14, g4, g6],
-    rating: 4.5,
-    badge: "Cozy Stay",
-    features: ["Work Desk", "Smart TV", "Wi-Fi", "AC"],
-  },
-  {
-    id: 4,
-    roomNo: "305",
-    roomType: "Suite",
-    pricePerNight: 6999,
-    capacityGuests: 4,
-    availability: "Available",
-    description:
-      "Executive comfort with lounge space, luxury bath, and curated hospitality.",
-    cover: pool,
-    images: [pool, g6, g3, g14],
-    rating: 4.9,
-    badge: "Premium",
-    features: ["Lounge", "Bathtub", "Breakfast", "Wi-Fi"],
-  },
-  {
-    id: 5,
-    roomNo: "410",
-    roomType: "Family",
-    pricePerNight: 5899,
-    capacityGuests: 4,
-    availability: "Available",
-    description:
-      "Spacious family stay with two beds and relaxing ambience for everyone.",
-    cover: g4,
-    images: [g4, room1, g14],
-    rating: 4.6,
-    badge: "Family Choice",
-    features: ["2 Beds", "Breakfast", "Wi-Fi", "AC"],
-  },
-  {
-    id: 6,
-    roomNo: "501",
-    roomType: "Luxury",
-    pricePerNight: 12999,
-    capacityGuests: 5,
-    availability: "Available",
-    description:
-      "Ultimate luxury with panoramic views and personalized premium service.",
-    cover: g3,
-    images: [g3, pool, g6, g4],
-    rating: 5.0,
-    badge: "Luxury",
-    features: ["Panoramic View", "Butler", "Premium Bath", "Wi-Fi"],
-  },
-];
+const FILTERS = ["All", "Deluxe", "Suite", "Standard", "Single", "Family", "Luxury"];
 
-const FILTERS = ["All", "Deluxe", "Suite", "Single", "Family", "Luxury"];
-
-const formatINR = (n) =>
-  new Intl.NumberFormat("en-IN", {
+const formatUSD = (n) =>
+  new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "INR",
+    currency: "USD",
     maximumFractionDigits: 0,
-  }).format(n);
+  }).format(Number(n || 0));
 
 export default function RoomsList() {
   const navigate = useNavigate();
@@ -121,51 +28,94 @@ export default function RoomsList() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [activeRoom, setActiveRoom] = useState(null);
 
+  const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState("");
+
   useEffect(() => {
     AOS.init({ duration: 900, once: true, easing: "ease-out-cubic" });
   }, []);
 
+  // ✅ Fetch rooms from backend
+  useEffect(() => {
+    let alive = true;
+
+    async function load() {
+      try {
+        setLoading(true);
+        setErr("");
+
+        const res = await getRooms();
+        const list = Array.isArray(res?.data) ? res.data : [];
+
+        // ✅ map backend -> UI shape
+        const mapped = list.map((r, idx) => ({
+          roomId: r.roomId || r._id || r.id, // backend unique id
+          roomNumber: r.roomNumber ?? r.roomNo ?? "",
+          type: r.type ?? r.roomType ?? "Standard",
+          pricePerNight: r.pricePerNight ?? r.price ?? 0,
+          capacity: r.capacity ?? r.capacityGuests ?? 1,
+          available: typeof r.available === "boolean" ? r.available : true,
+          createdAt: r.createdAt,
+          updatedAt: r.updatedAt,
+
+          // UI fields
+          badge: r.type || "Room",
+          rating: 4.6,
+          description: "Comfortable stay with premium amenities.",
+          cover: [room1, g3, g4, g6][idx % 4],
+          images: [room1, g3, g4, g6],
+          features: ["Wi-Fi", "AC", "Breakfast", "Room Service"],
+        }));
+
+        if (alive) setRooms(mapped);
+      } catch (e) {
+        const msg =
+          e?.response?.data?.message ||
+          e?.response?.data?.error ||
+          e?.message ||
+          "Failed to load rooms";
+        if (alive) setErr(msg);
+      } finally {
+        if (alive) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   const filteredRooms = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return ROOMS.filter((r) => {
-      const filterOk = activeFilter === "All" ? true : r.roomType === activeFilter;
+
+    return rooms.filter((r) => {
+      const filterOk = activeFilter === "All" ? true : r.type === activeFilter;
 
       const queryOk = !q
         ? true
-        : (
-            r.roomNo +
-            " " +
-            r.roomType +
-            " " +
-            r.badge +
-            " " +
-            r.availability
-          )
+        : `${r.roomNumber} ${r.type} ${r.available ? "available" : "unavailable"}`
             .toLowerCase()
             .includes(q);
 
       return filterOk && queryOk;
     });
-  }, [query, activeFilter]);
+  }, [rooms, query, activeFilter]);
 
   const openRoom = (room) => setActiveRoom(room);
   const closeRoom = () => setActiveRoom(null);
 
-  // ✅ BOOKING -> If NOT logged in => /login, else => /rooms-gallery (or booking page)
+  // ✅ Booking: if NOT logged in -> login, else -> booking page
   const handleBooking = (room) => {
-    const token = localStorage.getItem("token"); // ✅ token key
-
+    const token = localStorage.getItem("token");
     if (!token) {
-      // ✅ Go to login page if not logged in
-      navigate("/login", {
-        state: { from: "/rooms", roomId: room.id }, // optional redirect data
-      });
+      navigate("/login", { state: { from: "/rooms", roomId: room.roomId } });
       return;
     }
 
-    // ✅ Logged in -> continue booking
-    navigate("/rooms-gallery");
-    // OR: navigate(`/booking/${room.id}`);
+    // ✅ You can change this to your real booking route
+    navigate(`/booking/${room.roomId}`);
   };
 
   return (
@@ -211,7 +161,7 @@ export default function RoomsList() {
         </div>
       </section>
 
-      {/* LIST */}
+      {/* BODY */}
       <section className="rl-body">
         <div className="container py-5">
           <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
@@ -224,7 +174,27 @@ export default function RoomsList() {
             </div>
           </div>
 
-          {filteredRooms.length === 0 ? (
+          {/* ✅ Loading / Error */}
+          {loading && (
+            <div className="text-center py-5">
+              <div className="spinner-border" role="status" />
+              <div className="mt-2">Loading rooms...</div>
+            </div>
+          )}
+
+          {!loading && err && (
+            <div className="alert alert-danger">
+              {err}
+              <button
+                className="btn btn-sm btn-outline-danger ms-3"
+                onClick={() => window.location.reload()}
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
+          {!loading && !err && filteredRooms.length === 0 ? (
             <div className="rl-empty text-center p-5">
               <div className="rl-empty-ic mb-2">
                 <i className="bi bi-emoji-frown" />
@@ -232,31 +202,33 @@ export default function RoomsList() {
               <h4>No rooms found</h4>
               <p className="mb-0">Try another keyword or filter.</p>
             </div>
-          ) : (
+          ) : null}
+
+          {!loading && !err && filteredRooms.length > 0 && (
             <div className="row g-4">
               {filteredRooms.map((room, idx) => (
                 <div
-                  key={room.id}
+                  key={room.roomId}
                   className="col-12 col-md-6 col-lg-4"
                   data-aos="fade-up"
                   data-aos-delay={idx * 80}
                 >
                   <article className="rl-card h-100">
                     <div className="rl-media">
-                      <img className="rl-img" src={room.cover} alt={room.roomType} />
-                      <div className="rl-badge">{room.badge}</div>
+                      <img className="rl-img" src={room.cover} alt={room.type} />
+                      <div className="rl-badge">{room.type}</div>
 
-                      <div className={`rl-avail ${room.availability === "Available" ? "ok" : "no"}`}>
-                        {room.availability}
+                      <div className={`rl-avail ${room.available ? "ok" : "no"}`}>
+                        {room.available ? "Available" : "Unavailable"}
                       </div>
                     </div>
 
                     <div className="rl-card-body">
                       <div className="d-flex justify-content-between align-items-start gap-2">
                         <div>
-                          <div className="rl-type">{room.roomType}</div>
+                          <div className="rl-type">{room.type}</div>
                           <h3 className="rl-room-title">
-                            Room No: <span>{room.roomNo}</span>
+                            Room No: <span>{room.roomNumber}</span>
                           </h3>
                         </div>
                         <div className="rl-rating">
@@ -267,11 +239,11 @@ export default function RoomsList() {
 
                       <div className="rl-fields">
                         <div className="rl-field">
-                          <span>Price:</span> <b>{formatINR(room.pricePerNight)}</b>
+                          <span>Price:</span> <b>{formatUSD(room.pricePerNight)}</b>
                           <small>/night</small>
                         </div>
                         <div className="rl-field">
-                          <span>Capacity:</span> <b>{room.capacityGuests}</b> <small>guests</small>
+                          <span>Capacity:</span> <b>{room.capacity}</b> <small>guests</small>
                         </div>
                       </div>
 
@@ -287,7 +259,7 @@ export default function RoomsList() {
 
                       <div className="rl-footer">
                         <div className="rl-price">
-                          {formatINR(room.pricePerNight)} <span>/night</span>
+                          {formatUSD(room.pricePerNight)} <span>/night</span>
                         </div>
 
                         <div className="d-flex gap-2">
@@ -305,12 +277,8 @@ export default function RoomsList() {
                             type="button"
                             className="btn btn-primary rl-btn-primary"
                             onClick={() => handleBooking(room)}
-                            disabled={room.availability !== "Available"}
-                            title={
-                              room.availability !== "Available"
-                                ? "Room is unavailable"
-                                : "Book this room"
-                            }
+                            disabled={!room.available}
+                            title={!room.available ? "Room is unavailable" : "Book this room"}
                           >
                             Booking
                           </button>
@@ -325,7 +293,7 @@ export default function RoomsList() {
         </div>
       </section>
 
-      {/* MODAL (View Details) */}
+      {/* MODAL */}
       <div
         className="modal fade"
         id="roomDetailsModal"
@@ -340,9 +308,9 @@ export default function RoomsList() {
             <div className="modal-header rl-modal-head">
               <div>
                 <div className="rl-modal-type">
-                  {activeRoom?.roomType} • Room {activeRoom?.roomNo}
+                  {activeRoom?.type} • Room {activeRoom?.roomNumber}
                 </div>
-                <h5 className="modal-title rl-modal-title">{activeRoom?.badge}</h5>
+                <h5 className="modal-title rl-modal-title">{activeRoom?.type}</h5>
               </div>
               <button
                 type="button"
@@ -389,18 +357,12 @@ export default function RoomsList() {
 
                   <div className="rl-modal-info mt-3">
                     <div className="d-flex flex-wrap gap-2 mb-2">
-                      <span
-                        className={`rl-avail-pill ${
-                          activeRoom.availability === "Available" ? "ok" : "no"
-                        }`}
-                      >
-                        {activeRoom.availability}
+                      <span className={`rl-avail-pill ${activeRoom.available ? "ok" : "no"}`}>
+                        {activeRoom.available ? "Available" : "Unavailable"}
                       </span>
+                      <span className="rl-avail-pill dark">Capacity: {activeRoom.capacity} guests</span>
                       <span className="rl-avail-pill dark">
-                        Capacity: {activeRoom.capacityGuests} guests
-                      </span>
-                      <span className="rl-avail-pill dark">
-                        Price: {formatINR(activeRoom.pricePerNight)}/night
+                        Price: {formatUSD(activeRoom.pricePerNight)}/night
                       </span>
                     </div>
 
@@ -416,7 +378,7 @@ export default function RoomsList() {
 
                     <div className="d-flex justify-content-between align-items-center mt-4">
                       <div className="rl-price rl-price-lg">
-                        {formatINR(activeRoom.pricePerNight)} <span>/night</span>
+                        {formatUSD(activeRoom.pricePerNight)} <span>/night</span>
                       </div>
 
                       <button
@@ -424,7 +386,7 @@ export default function RoomsList() {
                         type="button"
                         data-bs-dismiss="modal"
                         onClick={() => handleBooking(activeRoom)}
-                        disabled={activeRoom.availability !== "Available"}
+                        disabled={!activeRoom.available}
                       >
                         Book This Room
                       </button>

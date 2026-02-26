@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/auth.css";
+import { userLogin } from "../../api/resortApi"; // ✅ adjust path if your file is in different folder
 
 export default function Login() {
   const navigate = useNavigate();
@@ -15,10 +16,10 @@ export default function Login() {
 
   const [error, setError] = useState("");
 
-  // Validation
+  // ✅ Validation
   const canSubmit = useMemo(() => {
     return form.email.trim() !== "" && form.password.trim().length >= 6;
-  }, [form]);
+  }, [form.email, form.password]);
 
   const onChange = (e) => {
     setForm((prev) => ({
@@ -40,17 +41,34 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // 🔥 Replace this with real API call (Flask/Django)
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      // ✅ API call (Axios)
+      const res = await userLogin({
+        email: form.email.trim(),
+        password: form.password,
+      });
 
-      // Save token
-      localStorage.setItem("token", "demo_token");
+      const data = res?.data || {};
+      const token = data?.token;
 
-      // Redirect to user profile page
-      navigate("/profile", { replace: true });
+      if (!token) throw new Error("Token not received from server.");
 
+      // ✅ Save token + user info
+      localStorage.setItem("token", token);
+      localStorage.setItem("user_auth", "true");
+      localStorage.setItem("user_name", data?.name || "");
+      localStorage.setItem("user_email", data?.email || form.email.trim());
+      localStorage.setItem("user_role", data?.role || "USER");
+
+      // ✅ Redirect after login
+      navigate("/user-profile", { replace: true });
     } catch (err) {
-      setError("Login failed. Please check your credentials.");
+      // ✅ Proper error message (backend may send different keys)
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err?.message ||
+        "Login failed. Please check your credentials.";
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -62,7 +80,6 @@ export default function Login() {
         <div className="row justify-content-center">
           <div className="col-12 col-sm-10 col-md-8 col-lg-5">
             <div className="auth-card animate-auth">
-
               {/* Header */}
               <div className="text-center mb-4">
                 <div className="auth-badge-sm mx-auto">
@@ -90,7 +107,6 @@ export default function Login() {
 
               {/* Form */}
               <form onSubmit={onSubmit}>
-
                 {/* Email */}
                 <div className="mb-3">
                   <label className="form-label">Email</label>
@@ -104,6 +120,7 @@ export default function Login() {
                       value={form.email}
                       onChange={onChange}
                       autoComplete="email"
+                      required
                     />
                   </div>
                 </div>
@@ -121,12 +138,15 @@ export default function Login() {
                       value={form.password}
                       onChange={onChange}
                       autoComplete="current-password"
+                      required
+                      minLength={6}
                     />
 
                     <button
                       type="button"
                       className="auth-eye"
                       onClick={() => setShow((prev) => !prev)}
+                      aria-label={show ? "Hide password" : "Show password"}
                     >
                       <i className={`bi ${show ? "bi-eye-slash" : "bi-eye"}`}></i>
                     </button>
@@ -136,11 +156,7 @@ export default function Login() {
                 {/* Remember + Forgot */}
                 <div className="d-flex justify-content-between align-items-center mb-4">
                   <div className="form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="remember"
-                    />
+                    <input type="checkbox" className="form-check-input" id="remember" />
                     <label className="form-check-label" htmlFor="remember">
                       Remember me
                     </label>
@@ -155,7 +171,7 @@ export default function Login() {
                 <button
                   type="submit"
                   className="btn btn-primary w-100 auth-btn"
-                  disabled={loading}
+                  disabled={loading || !canSubmit}
                 >
                   {loading ? (
                     <>

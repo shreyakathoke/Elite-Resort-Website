@@ -6,7 +6,7 @@ import "../../styles/roomListPage.css";
 
 import { getRooms } from "../../api/resortApi";
 
-// ✅ optional fallback images (if backend doesn't provide)
+// ✅ fallback images
 import room1 from "../../assets/room1.jpg";
 import g3 from "../../assets/g3.jpg";
 import g4 from "../../assets/g4.jpg";
@@ -20,6 +20,22 @@ const formatUSD = (n) =>
     currency: "USD",
     maximumFractionDigits: 0,
   }).format(Number(n || 0));
+
+function normalizeRoomsResponse(res) {
+  // supports: axios response OR already-data
+  const data = res?.data ?? res;
+
+  // supports: [] OR {rooms: []} OR {data: []}
+  const list = Array.isArray(data)
+    ? data
+    : Array.isArray(data?.rooms)
+    ? data.rooms
+    : Array.isArray(data?.data)
+    ? data.data
+    : [];
+
+  return list;
+}
 
 export default function RoomsList() {
   const navigate = useNavigate();
@@ -46,27 +62,38 @@ export default function RoomsList() {
         setErr("");
 
         const res = await getRooms();
-        const list = Array.isArray(res?.data) ? res.data : [];
+        const list = normalizeRoomsResponse(res);
 
-        // ✅ map backend -> UI shape
-        const mapped = list.map((r, idx) => ({
-          roomId: r.roomId || r._id || r.id, // backend unique id
-          roomNumber: r.roomNumber ?? r.roomNo ?? "",
-          type: r.type ?? r.roomType ?? "Standard",
-          pricePerNight: r.pricePerNight ?? r.price ?? 0,
-          capacity: r.capacity ?? r.capacityGuests ?? 1,
-          available: typeof r.available === "boolean" ? r.available : true,
-          createdAt: r.createdAt,
-          updatedAt: r.updatedAt,
+        const fallbackCovers = [room1, g3, g4, g6];
 
-          // UI fields
-          badge: r.type || "Room",
-          rating: 4.6,
-          description: "Comfortable stay with premium amenities.",
-          cover: [room1, g3, g4, g6][idx % 4],
-          images: [room1, g3, g4, g6],
-          features: ["Wi-Fi", "AC", "Breakfast", "Room Service"],
-        }));
+        const mapped = list.map((r, idx) => {
+          const roomId = r?.roomId || r?._id || r?.id;
+          const type = r?.type ?? r?.roomType ?? "Standard";
+
+          // ✅ prefer backend image if exists
+          const imageUrl = r?.imageUrl || r?.image || r?.photo || r?.thumbnail;
+
+          return {
+            // backend fields
+            roomId,
+            roomNumber: r?.roomNumber ?? r?.roomNo ?? r?.number ?? "",
+            type,
+            pricePerNight: r?.pricePerNight ?? r?.price ?? 0,
+            capacity: r?.capacity ?? r?.capacityGuests ?? 1,
+            available: typeof r?.available === "boolean" ? r.available : true,
+            createdAt: r?.createdAt,
+            updatedAt: r?.updatedAt,
+
+            // UI fields
+            rating: 4.6,
+            description: r?.description || "Comfortable stay with premium amenities.",
+            cover: imageUrl || fallbackCovers[idx % fallbackCovers.length],
+            images: imageUrl
+              ? [imageUrl, ...fallbackCovers]
+              : [...fallbackCovers],
+            features: ["Wi-Fi", "AC", "Breakfast", "Room Service"],
+          };
+        });
 
         if (alive) setRooms(mapped);
       } catch (e) {
@@ -87,11 +114,15 @@ export default function RoomsList() {
     };
   }, []);
 
+  // ✅ filter + search (works with "Deluxe Room" and filter "Deluxe")
   const filteredRooms = useMemo(() => {
     const q = query.trim().toLowerCase();
+    const f = activeFilter.toLowerCase();
 
     return rooms.filter((r) => {
-      const filterOk = activeFilter === "All" ? true : r.type === activeFilter;
+      const typeText = String(r?.type || "").toLowerCase();
+
+      const filterOk = activeFilter === "All" ? true : typeText.includes(f);
 
       const queryOk = !q
         ? true
@@ -109,13 +140,22 @@ export default function RoomsList() {
   // ✅ Booking: if NOT logged in -> login, else -> booking page
   const handleBooking = (room) => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login", { state: { from: "/rooms", roomId: room.roomId } });
+    const roomId = room?.roomId;
+
+    if (!roomId) {
+      alert("Room ID missing. Please check API response mapping.");
       return;
     }
 
-    // ✅ You can change this to your real booking route
-    navigate(`/booking/${room.roomId}`);
+    const bookingPath = `/booking/${roomId}`;
+
+    if (!token) {
+      // ✅ after login, go directly to booking page
+      navigate("/login", { state: { from: bookingPath } });
+      return;
+    }
+
+    navigate(bookingPath);
   };
 
   return (
@@ -174,7 +214,7 @@ export default function RoomsList() {
             </div>
           </div>
 
-          {/* ✅ Loading / Error */}
+          {/* Loading / Error */}
           {loading && (
             <div className="text-center py-5">
               <div className="spinner-border" role="status" />
@@ -208,7 +248,7 @@ export default function RoomsList() {
             <div className="row g-4">
               {filteredRooms.map((room, idx) => (
                 <div
-                  key={room.roomId}
+                  key={room.roomId || idx}
                   className="col-12 col-md-6 col-lg-4"
                   data-aos="fade-up"
                   data-aos-delay={idx * 80}
